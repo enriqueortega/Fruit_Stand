@@ -1,6 +1,6 @@
-var marketFluctuator = setInterval(updateMarket, 15000);
 
-//these are the variables that hold the market prices of the fruits
+
+//Constant Variables
 var marketApplePrice = 4.00;
 var marketBananaPrice = 5.00;
 var marketGrapePrice = 1.00;
@@ -24,12 +24,14 @@ var inventory = {
   watermelonPrices: [],
 };
 
-var count = 301;
+// Timing variables
+var count = 301; //How long the game will run
 var timer = setInterval(timerFunction, 1000);
+// How often the market changes
+var marketFluctuator = setInterval(updateMarket, 15000);
 
 // Executables
 $(document).ready(function(){
-
   timerFunction();
   //makes sure that the current cash on hand displayed on the dom matches the object
 
@@ -49,8 +51,6 @@ $(document).ready(function(){
   $('.sell-banana-button').on('click', sellBanana);
   $('.sell-orange-button').on('click', sellOrange);
   $('.sell-pear-button').on('click', sellPear);
-
-
 });
 
 //this is the function that updates the market
@@ -64,8 +64,6 @@ function updateMarket() {
   $('.banana-price').text(marketBananaPrice.toFixed(2));
   $('.buy-banana-button').data("bananaPriceData", marketBananaPrice);
 
-  // marketGrapePrice = singleFruitMarketUpdater(marketGrapePrice);
-  // $('.grape-price').text(marketGrapePrice);
   marketOrangePrice = singleFruitMarketUpdater(marketOrangePrice);
   $('.orange-price').text(marketOrangePrice.toFixed(2));
   $('.buy-orange-button').data("orangePriceData", marketOrangePrice);
@@ -73,27 +71,28 @@ function updateMarket() {
   marketPearPrice = singleFruitMarketUpdater(marketPearPrice);
   $('.pear-price').text(marketPearPrice.toFixed(2));
   $('.buy-pear-button').data("pearPriceData", marketPearPrice);
-  // marketWatermelonPrice = singleFruitMarketUpdater(marketWatermelonPrice);
-  // $('.watermelon-price').text(marketWatermelonPrice);
 
 };
 
-//this is what controlls which function runs when
-//the market updates and the interval at which it  updates
-
-//this is a function that updates a single fruit market price
+//Input: Takes in the current price of fruits in the market
+//Output: Returns updated price market by .50 cents up or down.
 function singleFruitMarketUpdater(fruitMarket){
   fruitMarket += randomNumber(-50, 50)/100;
+
+  // Sets floor for fruit market
   if (fruitMarket < .5) {
     fruitMarket = .5;
   };
 
+  // Sets ceiling for fruit market
   if (fruitMarket > 9.99) {
     fruitMarket = 9.99;
   };
   return ((Math.floor(fruitMarket*100))/100);
 }
 
+//Input: Takes in the all the prices of purchased fruit
+//Output: Returns the average of the fruit prices
 function averagePrice(inventoryArray) {
   var totalPrice = 0;
   for (var i=0; i < inventoryArray.length; i++) {
@@ -102,6 +101,47 @@ function averagePrice(inventoryArray) {
   var averagePrice = totalPrice/inventoryArray.length;
   return averagePrice;
 }
+
+//This generates a random min and max number
+function randomNumber(min, max){
+  return Math.floor(Math.random() * (1 + max - min) + min);
+}
+
+
+
+function timerFunction() {
+  count--;
+  $('.timer').text(count + " seconds left");
+  if (count == 0) {
+    clearInterval(timer);
+    clearInterval(marketFluctuator);
+
+
+    inventory.cashOnHand += inventory.appleStock * $('.buy-apple-button').data("applePriceData");
+    inventory.appleStock = 0;
+    //this updates the inventory display
+    $('.apple-inventory-display').text("Apple count: " + inventory.appleStock);
+
+
+    inventory.cashOnHand += inventory.bananaStock * $('.buy-banana-button').data("bananaPriceData");
+    inventory.bananaStock = 0;
+    $('.banana-inventory-display').text("Banana count: " + inventory.bananaStock);
+
+    inventory.cashOnHand += inventory.orangeStock * $('.buy-orange-button').data("orangePriceData");
+    inventory.orangeStock = 0;
+    $('.orange-inventory-display').text("Orange count: " + inventory.orangeStock);
+
+    inventory.cashOnHand += inventory.pearStock * $('.buy-pear-button').data("pearPriceData");
+    inventory.pearStock = 0;
+    $('.pear-inventory-display').text("Pear count: " + inventory.pearStock);
+
+    $('button').hide();
+
+    $('.current-cash').text(inventory.cashOnHand.toFixed(2));
+
+  }
+}
+
 
 function buyApple () {
   currentApplePrice = $('.buy-apple-button').data("applePriceData");
@@ -215,7 +255,6 @@ function sellOrange() {
   }
 }
 
-
 function buyPear () {
   currentPearPrice = $('.buy-pear-button').data("pearPriceData");
   //this makes it so you can't buy pear when you don't have enough money
@@ -253,40 +292,27 @@ function sellPear() {
   }
 }
 
-function timerFunction() {
-  count--;
-  $('.timer').text(count + " seconds left");
-  if (count == 0) {
-    clearInterval(timer);
-    clearInterval(marketFluctuator);
 
-
-    inventory.cashOnHand += inventory.appleStock * $('.buy-apple-button').data("applePriceData");
-    inventory.appleStock = 0;
-    //this updates the inventory display
-    $('.apple-inventory-display').text("Apple count: " + inventory.appleStock);
-
-
-    inventory.cashOnHand += inventory.bananaStock * $('.buy-banana-button').data("bananaPriceData");
-    inventory.bananaStock = 0;
-    $('.banana-inventory-display').text("Banana count: " + inventory.bananaStock);
-
-    inventory.cashOnHand += inventory.orangeStock * $('.buy-orange-button').data("orangePriceData");
-    inventory.orangeStock = 0;
-    $('.orange-inventory-display').text("Orange count: " + inventory.orangeStock);
-
-    inventory.cashOnHand += inventory.pearStock * $('.buy-pear-button').data("pearPriceData");
-    inventory.pearStock = 0;
-    $('.pear-inventory-display').text("Pear count: " + inventory.pearStock);
-
-    $('button').hide();
-
-    $('.current-cash').text(inventory.cashOnHand.toFixed(2));
-
-  }
-}
-
-//this gives us a random number
-function randomNumber(min, max){
-  return Math.floor(Math.random() * (1 + max - min) + min);
-}
+// // TODO: Consolidating Functions
+// function buy(){
+//
+// }
+//
+// function sell(){
+//
+// }
+//
+// function constructMarket(){
+//   //Builds whole market
+//   //Point to the user
+//   //Probably use the fruit array to help me construct the individual fruits
+//
+//   for(var k = 0 < fruitArray.length; i++){
+//     buildFruitDisplay(fruitArray[i]);
+//   }
+// }
+//
+// function buildFruitDisplay(fruit){
+//   // build individual cells
+//
+// }
