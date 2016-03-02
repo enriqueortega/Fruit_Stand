@@ -3,10 +3,11 @@
 //Constant Variables
 var marketApplePrice = 4.00;
 var marketBananaPrice = 5.00;
-var marketGrapePrice = 1.00;
 var marketOrangePrice = 3.00;
 var marketPearPrice = 7.00;
-var marketWatermelonPrice = 1.00;
+
+var minFruitPrice = 0.50;
+var maxFruitPrice = 9.99;
 
 var inventory = {
   cashOnHand: 100,
@@ -80,13 +81,15 @@ function singleFruitMarketUpdater(fruitMarket){
   fruitMarket += randomNumber(-50, 50)/100;
 
   // Sets floor for fruit market
-  if (fruitMarket < .5) {
-    fruitMarket = .5;
+  if (fruitMarket < minFruitPrice) {
+    fruitMarket = minFruitPrice;
+    console.log("Foo!");
   };
 
   // Sets ceiling for fruit market
-  if (fruitMarket > 9.99) {
-    fruitMarket = 9.99;
+  if (fruitMarket > maxFruitPrice) {
+    fruitMarket = maxFruitPrice;
+    console.log("Bar!");
   };
   return ((Math.floor(fruitMarket*100))/100);
 }
@@ -293,26 +296,41 @@ function sellPear() {
 }
 
 
-// // TODO: Consolidating Functions
-// function buy(){
-//
-// }
-//
-// function sell(){
-//
-// }
-//
-// function constructMarket(){
-//   //Builds whole market
-//   //Point to the user
-//   //Probably use the fruit array to help me construct the individual fruits
-//
-//   for(var k = 0 < fruitArray.length; i++){
-//     buildFruitDisplay(fruitArray[i]);
-//   }
-// }
-//
-// function buildFruitDisplay(fruit){
-//   // build individual cells
-//
-// }
+// TODO: Consolidating Functions
+
+function constructMarket(){
+
+
+}
+
+function buildFruitDisplay(fruit){
+
+
+}
+
+function buy(){
+  
+  //Reconstruct market
+  constructMarket();
+}
+
+function sell(){
+
+  //Reconstruct market
+  constructMarket();
+}
+
+function constructMarket(){
+  //Builds whole market
+  //Point to the user
+  //Probably use the fruit array to help me construct the individual fruits
+
+  for(var k = 0 ; k < fruitArray.length; i++){
+    buildFruitDisplay(fruitArray[i]);
+  }
+}
+
+function buildFruitDisplay(fruit){
+  // build individual cells
+
+}
