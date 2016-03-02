@@ -1,10 +1,3 @@
-//this gives us a random number
-function randomNumber(min, max){
-  return Math.floor(Math.random() * (1 + max - min) + min);
-}
-
-//this is what controlls which function runs when
-//the market updates and the interval at which it  updates
 var marketFluctuator = setInterval(updateMarket, 15000);
 
 //these are the variables that hold the market prices of the fruits
@@ -15,20 +8,50 @@ var marketOrangePrice = 3.00;
 var marketPearPrice = 7.00;
 var marketWatermelonPrice = 1.00;
 
+var inventory = {
+  cashOnHand: 100,
+  appleStock: 0,
+  bananaStock: 0,
+  grapeStock: 0,
+  orangeStock: 0,
+  pearStock: 0,
+  watermelonStock: 0,
+  applePrices: [],
+  bananaPrices: [],
+  grapePrices: [],
+  orangePrices: [],
+  pearPrices: [],
+  watermelonPrices: [],
+};
 
-//this is a function that updates a single fruit market price
-function singleFruitMarketUpdater(fruitMarket){
-  fruitMarket += randomNumber(-50, 50)/100;
-  if (fruitMarket < .5) {
-    fruitMarket = .5;
-  };
+var count = 301;
+var timer = setInterval(timerFunction, 1000);
 
-  if (fruitMarket > 9.99) {
-    fruitMarket = 9.99;
-  };
-  return ((Math.floor(fruitMarket*100))/100);
-}
+// Executables
+$(document).ready(function(){
 
+  timerFunction();
+  //makes sure that the current cash on hand displayed on the dom matches the object
+
+  $('.buy-apple-button').data("applePriceData", marketApplePrice);
+  $('.buy-apple-button').on('click', buyApple);
+
+  $('.buy-banana-button').data("bananaPriceData", marketBananaPrice);
+  $('.buy-banana-button').on('click', buyBanana);
+
+  $('.buy-orange-button').data("orangePriceData", marketOrangePrice);
+  $('.buy-orange-button').on('click', buyOrange);
+
+  $('.buy-pear-button').data("pearPriceData", marketPearPrice);
+  $('.buy-pear-button').on('click', buyPear);
+
+  $('.sell-apple-button').on('click', sellApple);
+  $('.sell-banana-button').on('click', sellBanana);
+  $('.sell-orange-button').on('click', sellOrange);
+  $('.sell-pear-button').on('click', sellPear);
+
+
+});
 
 //this is the function that updates the market
 function updateMarket() {
@@ -55,22 +78,21 @@ function updateMarket() {
 
 };
 
-var inventory = {
-  cashOnHand: 100,
-  appleStock: 0,
-  bananaStock: 0,
-  grapeStock: 0,
-  orangeStock: 0,
-  pearStock: 0,
-  watermelonStock: 0,
-  applePrices: [],
-  bananaPrices: [],
-  grapePrices: [],
-  orangePrices: [],
-  pearPrices: [],
-  watermelonPrices: [],
-};
+//this is what controlls which function runs when
+//the market updates and the interval at which it  updates
 
+//this is a function that updates a single fruit market price
+function singleFruitMarketUpdater(fruitMarket){
+  fruitMarket += randomNumber(-50, 50)/100;
+  if (fruitMarket < .5) {
+    fruitMarket = .5;
+  };
+
+  if (fruitMarket > 9.99) {
+    fruitMarket = 9.99;
+  };
+  return ((Math.floor(fruitMarket*100))/100);
+}
 
 function averagePrice(inventoryArray) {
   var totalPrice = 0;
@@ -156,7 +178,7 @@ function sellBanana() {
 }
 
 
-function buyOrange () {
+function buyOrange() {
   currentOrangePrice = $('.buy-orange-button').data("orangePriceData");
   //this makes it so you can't buy organge when you don't have enough money
   if (inventory.cashOnHand < currentOrangePrice) {
@@ -231,8 +253,6 @@ function sellPear() {
   }
 }
 
-var count = 301;
-var timer = setInterval(timerFunction, 1000);
 function timerFunction() {
   count--;
   $('.timer').text(count + " seconds left");
@@ -264,33 +284,9 @@ function timerFunction() {
     $('.current-cash').text(inventory.cashOnHand.toFixed(2));
 
   }
-
 }
 
-
-
-$(document).ready(function(){
-
-  timerFunction();
-  //makes sure that the current cash on hand displayed on the dom matches the object
-  // $('.current-cash').text(inventory.cashOnHand);
-
-  $('.buy-apple-button').data("applePriceData", marketApplePrice);
-  $('.buy-apple-button').on('click', buyApple);
-
-  $('.buy-banana-button').data("bananaPriceData", marketBananaPrice);
-  $('.buy-banana-button').on('click', buyBanana);
-
-  $('.buy-orange-button').data("orangePriceData", marketOrangePrice);
-  $('.buy-orange-button').on('click', buyOrange);
-
-  $('.buy-pear-button').data("pearPriceData", marketPearPrice);
-  $('.buy-pear-button').on('click', buyPear);
-
-  $('.sell-apple-button').on('click', sellApple);
-  $('.sell-banana-button').on('click', sellBanana);
-  $('.sell-orange-button').on('click', sellOrange);
-  $('.sell-pear-button').on('click', sellPear);
-
-
-});
+//this gives us a random number
+function randomNumber(min, max){
+  return Math.floor(Math.random() * (1 + max - min) + min);
+}
